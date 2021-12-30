@@ -26,10 +26,10 @@ const main = async() => {
 		switch (opt) {
 			case '1':
 				const city = await readInput('City:');
-				if(city === '') break;
+				if(city === '') continue;
 				const infoCities = await search.searchCity(city);
 				const id = await showMenu(infoCities, 'Select a place', 'Cancel', true);
-				if(id === '0') break;
+				if(id === '0') continue;
 				const selectedCity = infoCities.find(city => city.id == id);
 				const wheather = await search.getWheather(selectedCity);
 				showHeader(header);
@@ -37,7 +37,7 @@ const main = async() => {
 				break;
 			case '2':
 				const idHistory = await showMenu(search.toArray.reverse(), 'Select a place', 'Back');
-				if(idHistory === '0') break;
+				if(idHistory === '0') continue;
 				const wheatherHistory = await search.getWheather(search.history[idHistory]);
 				showHeader(header);
 				search.showWheather(wheatherHistory);

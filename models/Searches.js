@@ -56,10 +56,8 @@ class Searches {
 
 	}
 
-	paramsOpenWeather(city) {
+	paramsOpenWeather() {
 		return {
-			'lat': city.lat,
-			'lon': city.lon,
 			'appid': process.env.OPENWEATHER_KEY,
 			'units': 'metric'
 		}
@@ -71,23 +69,28 @@ class Searches {
 			
 			const intance = axios.create({
 				baseURL: 'https://api.openweathermap.org/data/2.5/weather',
-				params: this.paramsOpenWeather(city)
-			})
+				params: {
+					...this.paramsOpenWeather(), 
+					'lat': city.lat, 
+					'lon': city.lon
+				}});
 		
 			console.log('Please wait...');
 			
 			const res = await intance.get();
 			
 			this.addHistory(city);
+
+			const {weather, main} = res.data;
 			
 			return {
 					'name': city.name,
 					'lon': city.lon,
 					'lat': city.lat,
-					'description': res.data.weather[0].description,
-					'temp': res.data.main.temp,
-					'temp_min': res.data.main.temp_min,
-					'temp_max': res.data.main.temp_max
+					'description': weather[0].description,
+					'temp': main.temp,
+					'temp_min': main.temp_min,
+					'temp_max': main.temp_max
 			};
 
 		} catch (error) {
